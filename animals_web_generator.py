@@ -5,8 +5,14 @@ def load_data(file_path):
   with open(file_path, "r") as handle:
     return json.load(handle)
 
-
 animals_data = load_data('animals_data.json')
+
+
+def load_html_data(file_path):
+    """ Loads an HTML file and returns its content """
+    with open(file_path, "r", encoding="utf-8") as file:
+        animals_template = file.read()
+    return animals_template
 
 
 def animal_name(animal):
@@ -38,7 +44,7 @@ def animal_type(animal):
         return f"Type: {type_value}"
     return None
 
-tasks = {
+json_animal_data = {
     "name": animal_name,
     "diet": animal_diet,
     "location": animal_locations,
@@ -47,25 +53,26 @@ tasks = {
 
 
 def main():
-    index = 0
-    total_animals = len(animals_data)
+    one_string_output = ""
 
-    while index < total_animals:
-        animal = animals_data[index]
+    for animal in animals_data:
+        all_animals = []
 
-        results = []
-
-        for task in tasks.values():
+        for task in json_animal_data.values():
             value = task(animal)
             if value is not None:
-                results.append(value)
+                all_animals.append(value)
 
-        for item in results:
-            print(item)
+        for item in all_animals:
+            one_string_output += item + "\n"
+        one_string_output += "\n"
 
-        index += 1
-        print()
 
+    old_template = load_html_data("animals_template.html")
+    overwritten_template = old_template.replace("__REPLACE_ANIMALS_INFO__", one_string_output)
+
+    with open("animals.html", "w", encoding="utf-8") as file:
+        file.write(overwritten_template)
 
 if __name__ == "__main__":
     main()
