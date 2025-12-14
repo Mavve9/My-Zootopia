@@ -58,14 +58,15 @@ def main():
     for animal in animals_data:
         all_animals = []
 
-        for task in json_animal_data.values():
-            value = task(animal)
+        for category in json_animal_data.values():
+            value = category(animal)
             if value is not None:
                 all_animals.append(value)
 
+        one_string_output += "<li class='cards__item'>\n"
         for item in all_animals:
-            one_string_output += item + "\n"
-        one_string_output += "\n"
+            one_string_output += f"{item}<br/>\n"
+        one_string_output += "</li>\n"
 
 
     old_template = load_html_data("animals_template.html")
